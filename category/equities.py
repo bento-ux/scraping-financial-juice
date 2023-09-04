@@ -9,7 +9,7 @@ import os
 from selenium.webdriver.common.alert import Alert
 import requests
 
-file_path = os.path.join("/home/ben/Documents/freelancer/web-scrap/tests/production2/scraping-financial-juice/category/noted-headline", "equities.txt")
+file_path = os.path.join("/root/web_scrape/scrape_python/scraping-financial-juice/category/noted-headline", "equities.txt")
 
 def scroll_to_element(driver, element):
     # Scroll to the element using JavaScript
