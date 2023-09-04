@@ -12,6 +12,9 @@ import seleniumwire.undetected_chromedriver as uc
 from selenium.webdriver.common.keys import Keys
 import http.client
 import json
+import threading
+import time
+
 
 #IMPORT BY CATEGORY
 from category.my_news import scrape_articles_my_news
@@ -78,6 +81,170 @@ def login_to_website(email, password):
 
     return driver
 
+def scraping_task():
+    max_execution_time_ms = 300000  # 300000 milidetik (300 detik)
+
+    try:
+        start_time = time.time()  # Waktu mulai scraping
+        #MY_NEWS
+        scraped_articles_my_news = scrape_articles_my_news(url, driver)
+        while True:
+            if (time.time() - start_time) * 1000 > max_execution_time_ms:
+                print("Scraping berhenti karena waktu telah habis.")
+                break
+            if scraped_articles_my_news:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_my_news)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                
+
+                
+            else:
+                print("Artikel My News kosong")
+
+            # # time.sleep(10)
+
+            scraped_articles_bonds = scrape_articles_bonds(url, driver)
+            if scraped_articles_bonds:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_bonds)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                print("Response bonds:", conn.getresponse().status)
+            else:
+                print("Artikel Bonds kosong")
+
+
+        # # time.sleep(10)
+
+            scraped_articles_commodities = scrape_articles_commodities(url, driver)
+            if scraped_articles_commodities:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_commodities)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                # print("Response commodities:", conn.getresponse().status)
+            else:
+                print("Artikel commodities kosong")
+
+            # # time.sleep(10)
+
+            scraped_articles_crypto = scrape_articles_crypto(url, driver)
+            if scraped_articles_crypto:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_crypto)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                print("Response crypto:", conn.getresponse().status)
+            else:
+                print("Artikel crypto kosong")
+
+            # # time.sleep(10)
+
+            scraped_articles_equities = scrape_articles_equities(url, driver)
+            if scraped_articles_equities:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_equities)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                # print("Response equities:", conn.getresponse().status)
+            else:
+                print("Artikel equities kosong")
+
+            
+            # time.sleep(10)
+
+            scraped_articles_forex = scrape_articles_forex(url, driver)
+            if scraped_articles_forex:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_forex)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                print("Response forex:", conn.getresponse().status)
+            else:
+                print("Artikel forex kosong")
+            
+            # # time.sleep(10)
+
+            scraped_articles_indexes = scrape_articles_indexes(url, driver)
+            if scraped_articles_indexes:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_indexes)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                print("Response indexes:", conn.getresponse().status)
+            else:
+                print("Artikel indexes kosong")
+            
+            # time.sleep(10)
+
+
+            scraped_articles_macro = scrape_articles_macro(url, driver)
+            if scraped_articles_macro:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_macro)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                print("Response macro:", conn.getresponse().status)
+            else:
+                print("Artikel macro kosong")
+            
+            # time.sleep(10)
+
+            scraped_articles_risk = scrape_articles_risk(url, driver)
+            if scraped_articles_risk:
+                # SEND TO SERVER
+                # Mengonversi data menjadi format JSON
+                json_data = json.dumps(scraped_articles_risk)
+
+                # Mengirim data JSON ke server menggunakan POST request
+                conn = http.client.HTTPConnection("localhost", 3001)
+                headers = {'Content-type': 'application/json'}
+                conn.request("POST", "/", json_data, headers)
+                print("Response risk:", conn.getresponse().status)
+            else:
+                print("Artikel risk kosong")
+    
+    except Exception as e:
+        print(f"Terjadi kesalahan: {str(e)}")
+    
+    finally:
+        # Tutup browser dan bebas sumber daya lainnya
+        driver.quit()
+
 
 
 if __name__ == "__main__":
@@ -88,263 +255,27 @@ if __name__ == "__main__":
     time.sleep(5)
     url = 'https://www.financialjuice.com/home' 
 
-
-    #MY_NEWS
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-    scraped_articles_my_news = scrape_articles_my_news(url, driver)
-    if scraped_articles_my_news:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_my_news)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        print("Response bonds:", conn.getresponse().status)
-
-        for idx, data in enumerate(scraped_articles_my_news, 1):
-            print(f"{idx}. Id: {data['idData']}")
-            print(f"   Title: {data['title']}")
-            print("--------------------------")
-    else:
-        print("Artikel My News kosong")
-
-    time.sleep(10)
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_bonds = scrape_articles_bonds(url, driver)
-    if scraped_articles_bonds:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_bonds)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        print("Response bonds:", conn.getresponse().status)
-    else:
-        print("Artikel Bonds kosong")
+    scraping_task()
 
 
-    time.sleep(10)
+    # Buat thread untuk menjalankan scraping
+    # scraping_thread = threading.Thread(target=scraping_task)
 
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
+    # # Mulai thread scraping
+    # scraping_thread.start()
 
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_commodities = scrape_articles_commodities(url, driver)
-    if scraped_articles_commodities:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_commodities)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        # print("Response commodities:", conn.getresponse().status)
-    else:
-        print("Artikel commodities kosong")
-
-    time.sleep(10)
-
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_crypto = scrape_articles_crypto(url, driver)
-    if scraped_articles_crypto:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_crypto)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        print("Response crypto:", conn.getresponse().status)
-    else:
-        print("Artikel crypto kosong")
-
-    time.sleep(10)
-
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_equities = scrape_articles_equities(url, driver)
-    if scraped_articles_equities:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_equities)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        # print("Response equities:", conn.getresponse().status)
-    else:
-        print("Artikel equities kosong")
-
+    # # Tunggu maksimum waktu eksekusi
+    # max_execution_time = 20  # 5 menit
+    # scraping_thread.join(1)
+    # stop_thread = True
     
-    time.sleep(10)
-
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_forex = scrape_articles_forex(url, driver)
-    if scraped_articles_forex:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_forex)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        print("Response forex:", conn.getresponse().status)
-    else:
-        print("Artikel forex kosong")
-    
-    time.sleep(10)
-
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_indexes = scrape_articles_indexes(url, driver)
-    if scraped_articles_indexes:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_indexes)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        print("Response indexes:", conn.getresponse().status)
-    else:
-        print("Artikel indexes kosong")
-    
-    time.sleep(10)
-
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_macro = scrape_articles_macro(url, driver)
-    if scraped_articles_macro:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_macro)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        print("Response macro:", conn.getresponse().status)
-    else:
-        print("Artikel macro kosong")
-    
-    time.sleep(10)
-
-    try:
-            alert = driver.switch_to.alert
-            # Jika alert muncul, dapatkan teks pada alert dan cetak ke konsol
-            alert_text = alert.text
-            print('Teks pada alert main:', alert_text)
-            alert.accept()
-            driver.implicitly_wait(2)
-
-    except Exception as e:
-        # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
-        print('Tidak ada alert yang muncul.')
-
-    scraped_articles_risk = scrape_articles_risk(url, driver)
-    if scraped_articles_risk:
-        # SEND TO SERVER
-        # Mengonversi data menjadi format JSON
-        json_data = json.dumps(scraped_articles_risk)
-
-        # Mengirim data JSON ke server menggunakan POST request
-        conn = http.client.HTTPConnection("localhost", 3001)
-        headers = {'Content-type': 'application/json'}
-        conn.request("POST", "/", json_data, headers)
-        print("Response risk:", conn.getresponse().status)
-    else:
-        print("Artikel risk kosong")
+    # if scraping_thread.is_alive():
+    #     print("Scraping berhenti karena waktu telah habis.")
+    #     # Hentikan thread secara manual jika perlu
+    #     scraping_thread._stop()
+    # else:
+    #     print("Scraping selesai dalam waktu yang ditentukan.")
 
 
     # Tutup WebDriver setelah selesai
-    driver.quit()
+    # driver.quit()

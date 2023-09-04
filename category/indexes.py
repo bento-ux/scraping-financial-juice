@@ -9,7 +9,7 @@ import os
 from selenium.webdriver.common.alert import Alert
 import requests
 
-file_path = os.path.join("/home/ben/Documents/freelancer/web-scrap/tests/production/category/noted-headline", "indexes.txt")
+file_path = os.path.join("/home/ben/Documents/freelancer/web-scrap/tests/production2/scraping-financial-juice/category/noted-headline", "indexes.txt")
 
 def scroll_to_element(driver, element):
     # Scroll to the element using JavaScript
@@ -22,7 +22,7 @@ def scrape_articles_indexes(url, driver):
         driver.get(url)
 
         # Tunggu sebentar agar konten AJAX dimuat sepenuhnya
-        time.sleep(10)
+        # time.sleep(10)
 
         response = requests.get(url)
         print(f"Response halaman page indexes setelah login: {response.status_code}")
@@ -54,13 +54,12 @@ def scrape_articles_indexes(url, driver):
             # Jika alert tidak muncul, lanjutkan eksekusi kode Anda
             print('Tidak ada alert yang muncul.')
 
-        wait = WebDriverWait(driver, 20)
+        wait = WebDriverWait(driver, 10)
   
-        wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="aspnetForm"]/div[3]/div[1]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/ul/li[7]/a')))
-        click_element = driver.find_element(by=By.XPATH,value='//*[@id="aspnetForm"]/div[3]/div[1]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/ul/li[7]/a')
+        wait.until(EC.presence_of_element_located((By.XPATH,'//*[@id="aspnetForm"]/div[3]/div[1]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/ul/li[8]/a')))
+        click_element = driver.find_element(by=By.XPATH,value='//*[@id="aspnetForm"]/div[3]/div[1]/div[2]/div[2]/div/div/div/div/div[2]/div/div/div[1]/ul/li[8]/a')
         driver.execute_script('arguments[0].click()',   click_element)
 
-        
         wait.until(EC.presence_of_element_located((By.CLASS_NAME,"headline-title"))) #sangat berguna, jadi ketika class ini sudah muncul,maka baru di page source
 
         with open(file_path, "r") as file:
@@ -80,6 +79,15 @@ def scrape_articles_indexes(url, driver):
 
                     i = True
                     while i:
+                        # try:
+                        #     alert = driver.switch_to.alert
+                        #     alert_text = alert.text
+                        #     print('Teks pada alert:', alert_text)
+                        #     alert.accept()
+                        #     driver.implicitly_wait(2)
+
+                        # except Exception as e:
+                        #     print('Tidak ada alert yang muncul.')
                         html = driver.find_element(By.TAG_NAME, 'html')
                         html.send_keys(Keys.PAGE_DOWN)
                         # Add some waiting time to allow content to load
@@ -129,7 +137,9 @@ def scrape_articles_indexes(url, driver):
             if articles:
                 last_headline_id = articles[-1]['data-headlineid']      
                 if last_headline_id == headline_id:  # Check if the last data is the same as the current one
+                    print("selesai scrapping indexes")
                     break
+
 
         if results:
            with open(file_path, "w") as file:

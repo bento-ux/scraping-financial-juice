@@ -12,7 +12,7 @@ import os
 from selenium.webdriver.common.alert import Alert
 import requests
 
-file_path = os.path.join("/home/ben/Documents/freelancer/web-scrap/tests/production/category/noted-headline", "my-news.txt")
+file_path = os.path.join("/home/ben/Documents/freelancer/web-scrap/tests/production2/scraping-financial-juice/category/noted-headline", "my-news.txt")
 
 
 def scroll_to_element(driver, element):
@@ -26,7 +26,7 @@ def scrape_articles_my_news(url, driver):
         driver.get(url)
 
         # Tunggu sebentar agar konten AJAX dimuat sepenuhnya
-        time.sleep(10)
+        # time.sleep(10)
 
         response = requests.get(url)
         print(f"Response halaman page my news setelah login: {response.status_code}")
@@ -85,12 +85,20 @@ def scrape_articles_my_news(url, driver):
 
                     i = True
                     while i:
+                        try:
+                            alert = driver.switch_to.alert
+                            alert_text = alert.text
+                            print('Teks pada alert:', alert_text)
+                            alert.accept()
+                            driver.implicitly_wait(2)
+
+                        except Exception as e:
+                            print('Tidak ada alert yang muncul.')
+
                         html = driver.find_element(By.TAG_NAME, 'html')
                         html.send_keys(Keys.PAGE_DOWN)
-                        # Add some waiting time to allow content to load
                         driver.implicitly_wait(20)  # Set the implicit wait time as needed
 
-                        ###
                         html = driver.page_source
                         soup = BeautifulSoup(html, 'html.parser')
                         articles = soup.find_all('div', attrs={'data-headlineid': True})
@@ -134,16 +142,7 @@ def scrape_articles_my_news(url, driver):
                             text_inside_a_tag = anchor_element.text.strip()
                             # latest_id_to_save = headline_id
                             results.append({'idData': headline_id, 'title': text_inside_a_tag})
-                            # SEND TO SERVER
-                            # data = {
-                            #         "title": text_inside_a_tag
-                            # }
-                            # json_data = json.dumps(data)
-                            # conn = http.client.HTTPConnection("localhost", 3000)
-                            # headers = {
-                            #     'Content-Type': 'application/json'
-                            # }
-                            # conn.request("POST", "/", json_data, headers)
+
 
             # Update the last_headline_id
             if articles:
