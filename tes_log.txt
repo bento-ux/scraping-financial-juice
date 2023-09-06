@@ -1,0 +1,23 @@
+Response halaman: 200
+Error during login: Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=115.0.5790.102)
+Stacktrace:
+#0 0x56544548d613 <unknown>
+#1 0x5654451b9537 <unknown>
+#2 0x5654451913c1 <unknown>
+#3 0x56544521d82f <unknown>
+#4 0x565445230856 <unknown>
+#5 0x565445218803 <unknown>
+#6 0x5654451ec68b <unknown>
+#7 0x5654451ed42e <unknown>
+#8 0x56544544ec28 <unknown>
+#9 0x565445452af7 <unknown>
+#10 0x56544545d01c <unknown>
+#11 0x565445453723 <unknown>
+#12 0x565445422457 <unknown>
+#13 0x565445477628 <unknown>
+#14 0x5654454777b7 <unknown>
+#15 0x565445486483 <unknown>
+#16 0x7f7faefaa609 start_thread
+
